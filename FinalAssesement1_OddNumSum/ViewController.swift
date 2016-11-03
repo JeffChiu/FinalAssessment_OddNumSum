@@ -31,31 +31,38 @@ class ViewController: UIViewController {
     
     func checkField() -> Bool {
         var rtnVal: Bool = true
-        if self.startNumberTextField.text == nil ||
-                self.startNumberTextField.text! == "" ||
-                self.endNumberTextField.text == nil ||
-                self.endNumberTextField.text! == "" {
-            let alert = UIAlertController(title: "Check Error", message: "Please Confirm Input Two Number", preferredStyle: .Alert)
-            let ok = UIAlertAction(title: "OK", style: .Default, handler: nil)
-            alert.addAction(ok)
-            self.presentViewController(alert, animated: true, completion: nil)
-            rtnVal = false
-        } else {
-            startNum = Int(self.startNumberTextField.text!)
-            endNum = Int(self.endNumberTextField.text!)
-            if startNum > endNum {
-                let alert = UIAlertController(title: "Check Error", message: "End Number Must Be More Than Start Number", preferredStyle: .Alert)
-                let ok = UIAlertAction(title: "OK", style: .Default, handler: nil)
-                alert.addAction(ok)
-                self.presentViewController(alert, animated: true, completion: nil)
+        if let startText = self.startNumberTextField.text where !startText.isEmpty {
+            if let endText = self.endNumberTextField.text where !endText.isEmpty {
+                startNum = Int(startText)
+                endNum = Int(endText)
+                if startNum > endNum {
+                    alertControl2()
+                    rtnVal = false
+                }
+            } else {
+                alertControl1()
                 rtnVal = false
             }
+        } else {
+            alertControl1()
+            rtnVal = false
         }
+        
         return rtnVal
     }
     
-    func hideKeyboard() {
-        view.endEditing(true)
+    func alertControl1() {
+        let alert = UIAlertController(title: "Check Error", message: "Please Confirm Input Two Number", preferredStyle: .Alert)
+        let ok = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(ok)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func alertControl2() {
+        let alert = UIAlertController(title: "Check Error", message: "End Number Must Be More Than Start Number", preferredStyle: .Alert)
+        let ok = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(ok)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -64,6 +71,10 @@ class ViewController: UIViewController {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
+    }
+    
+    func hideKeyboard() {
+        view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
